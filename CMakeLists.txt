@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_subdirectory(src)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Quick Gui)
+find_package(Qt6 REQUIRED COMPONENTS Core Quick Gui WebEngineQuick)
 
 qt_standard_project_setup()
 
@@ -19,7 +19,7 @@ qt_add_executable(helios
     resources.qrc
 )
 
-target_link_libraries(helios PRIVATE Qt6::Core Qt6::Quick Qt6::Gui)
+target_link_libraries(helios PRIVATE Qt6::Core Qt6::Quick Qt6::Gui Qt6::WebEngineQuick)
 
 set_target_properties(helios PROPERTIES
     WIN32_EXECUTABLE ON

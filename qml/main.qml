@@ -1,5 +1,7 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Layouts
+import QtWebEngine
 
 ApplicationWindow{
     id: application
@@ -9,7 +11,7 @@ ApplicationWindow{
     flags: Qt.FramelessWindowHint
     color: "transparent"
 
-    property int windowMargin: 5
+    property int windowMargin: 7
 
     function toggleMaximized() {
         if (application.visibility === Window.Maximized) {
@@ -60,78 +62,92 @@ ApplicationWindow{
         color: "#121212"
         anchors.fill: parent
 
-        //titlebar
-        Rectangle{
-            id: titlebar
-            anchors {
-                top: parent.top
-                left: parent.left
-                right: parent.right
-                margins: application.windowMargin
+        ColumnLayout{
+            anchors.fill: parent
+            anchors.margins: application.windowMargin
+            //titlebar
+            Rectangle{
+                id: titlebar
+
+                height: 25
+                topLeftRadius: 10
+                topRightRadius: 10
+                color: "transparent"
+
+                DragHandler {
+                    grabPermissions: TapHandler.CanTakeOverFromAnything
+                    onActiveChanged: if (active) { application.startSystemMove(); }
+                }
+
+                //buttons
+                Row{
+                    anchors.fill: parent
+                    padding: 5
+                    spacing: 3
+                    RoundButton{
+                        id: minimizeButton
+                        width: 13
+                        height: 13
+
+                        background: Rectangle{
+                            radius: 20
+                            width: parent.width
+                            height: parent.height
+                            color: "#7FFF74"
+                        }
+
+                        onClicked: application.showMinimized()
+                    }
+
+                    RoundButton{
+                        id: maximizeButton
+                        width: 13
+                        height: 13
+
+                        background: Rectangle{
+                            radius: 20
+                            width: parent.width
+                            height: parent.height
+                            color: "#FFEB36"
+                        }
+
+                        onClicked: toggleMaximized()
+                    }
+
+                    RoundButton{
+                        id: closeButton
+                        width: 13
+                        height: 13
+
+                        background: Rectangle{
+                            radius: 20
+                            width: parent.width
+                            height: parent.height
+                            color: "#FF4343"
+                        }
+
+                        onClicked: application.close()
+                    }
+                }
             }
 
-            height: 25
-            topLeftRadius: 10
-            topRightRadius: 10
-            color: "transparent"
-
-            DragHandler {
-                grabPermissions: TapHandler.CanTakeOverFromAnything
-                onActiveChanged: if (active) { application.startSystemMove(); }
-            }
-
-            //buttons
-            Row{
-                anchors.fill: parent
-                padding: 5
-                spacing: 3
-                RoundButton{
-                    id: minimizeButton
-                    width: 13
-                    height: 13
-
-                    background: Rectangle{
-                        radius: 20
-                        width: parent.width
-                        height: parent.height
-                        color: "#7FFF74"
-                    }
-
-                    onClicked: application.showMinimized()
-                }
-
-                RoundButton{
-                    id: maximizeButton
-                    width: 13
-                    height: 13
-
-                    background: Rectangle{
-                        radius: 20
-                        width: parent.width
-                        height: parent.height
-                        color: "#FFEB36"
-                    }
-
-                    onClicked: toggleMaximized()
-                }
-
-                RoundButton{
-                    id: closeButton
-                    width: 13
-                    height: 13
-
-                    background: Rectangle{
-                        radius: 20
-                        width: parent.width
-                        height: parent.height
-                        color: "#FF4343"
-                    }
-
-                    onClicked: application.close()
-                }
+            WebEngineView{
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                url: "https://fluxbrowserhome.netlify.app/"
             }
         }
 
+    }
 
+    Rectangle{
+        width: 300
+        height: 50
+        radius: 10
+        color: "#efefef"
+
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: application.windowMargin
     }
 }
