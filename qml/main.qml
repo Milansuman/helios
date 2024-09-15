@@ -24,6 +24,16 @@ ApplicationWindow{
     MouseArea {
         anchors.fill: parent
         hoverEnabled: true
+
+        function getEdges(mouseX, mouseY) {
+            let e = 0;
+            if (mouseX < windowMargin) { e |= Qt.LeftEdge }
+            if (mouseX >= width - windowMargin) { e |= Qt.RightEdge }
+            if (mouseY < windowMargin) { e |= Qt.TopEdge }
+            if (mouseY >= height - windowMargin) { e |= Qt.BottomEdge }
+            return e;
+        }
+
         cursorShape: {
             const p = Qt.point(mouseX, mouseY);
             const b = windowMargin; // Increase the corner size slightly
@@ -34,22 +44,12 @@ ApplicationWindow{
             if (p.x < b || p.x >= width - b) return Qt.SizeHorCursor;
             if (p.y < b || p.y >= height - b) return Qt.SizeVerCursor;
         }
-        acceptedButtons: Qt.NoButton // don't handle actual events
-    }
 
-    DragHandler {
-        id: resizeHandler
-        grabPermissions: TapHandler.TakeOverForbidden
-        target: null
-        onActiveChanged: if (active) {
-            const p = resizeHandler.centroid.position;
-            const b = windowMargin + 10; // Increase the corner size slightly
-            let e = 0;
-            if (p.x < b) { e |= Qt.LeftEdge }
-            if (p.x >= width - b) { e |= Qt.RightEdge }
-            if (p.y < b) { e |= Qt.TopEdge }
-            if (p.y >= height - b) { e |= Qt.BottomEdge }
-            application.startSystemResize(e);
+        onPressed: {
+            let edges = getEdges(mouseX, mouseY);
+            if (edges !== 0) {
+                application.startSystemResize(edges);
+            }
         }
     }
 
