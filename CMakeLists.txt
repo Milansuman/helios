@@ -26,4 +26,4 @@ set_target_properties(helios PROPERTIES
     MACOSX_BUNDLE ON
 )
 
-qt_finalize_executable(helios)
+# qt_finalize_executable(helios)
