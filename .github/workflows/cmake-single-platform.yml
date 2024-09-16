@@ -74,7 +74,7 @@ jobs:
       run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
 
     - name: Statically link binary
-      run: windeployqt ${{ steps.strings.outputs.build-output-dir }}/Release/helios.exe
+      run: windeployqt --qmldir ${{ github.workspace }}/qml ${{ steps.strings.outputs.build-output-dir }}/Release/helios.exe
 
     - name: Compress Archive
       run: Compress-Archive -Path ${{ steps.strings.outputs.build-output-dir }}/Release -DestinationPath ${{ steps.strings.outputs.build-output-dir }}/Release_Windows_x86_64.zip
