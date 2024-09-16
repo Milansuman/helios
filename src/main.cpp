@@ -3,8 +3,8 @@
 #include <QtWebEngineQuick>
 
 int main(int argc, char **argv){
-    QGuiApplication app(argc, argv);
     QtWebEngineQuick::initialize();
+    QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
 
     engine.load(":/qml/main.qml");

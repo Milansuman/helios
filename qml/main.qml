@@ -11,7 +11,7 @@ ApplicationWindow{
     flags: Qt.FramelessWindowHint
     color: "transparent"
 
-    property int windowMargin: 7
+    property int windowMargin: 5
 
     function toggleMaximized() {
         if (application.visibility === Window.Maximized) {
@@ -51,6 +51,8 @@ ApplicationWindow{
             let edges = getEdges(mouseX, mouseY);
             if (edges !== 0) {
                 application.startSystemResize(edges);
+            }else if(mouseY <= 25){
+                application.startSystemMove();
             }
         }
     }
@@ -69,23 +71,19 @@ ApplicationWindow{
             Rectangle{
                 id: titlebar
 
-                height: 25
+                height: 20
                 topLeftRadius: 10
                 topRightRadius: 10
                 color: "transparent"
-
-                DragHandler {
-                    grabPermissions: TapHandler.CanTakeOverFromAnything
-                    onActiveChanged: if (active) { application.startSystemMove(); }
-                }
 
                 //buttons
                 Row{
                     anchors.fill: parent
                     padding: 5
                     spacing: 3
+
                     RoundButton{
-                        id: minimizeButton
+                        id: closeButton
                         width: 13
                         height: 13
 
@@ -93,10 +91,10 @@ ApplicationWindow{
                             radius: 20
                             width: parent.width
                             height: parent.height
-                            color: "#7FFF74"
+                            color: "#FF4343"
                         }
 
-                        onClicked: application.showMinimized()
+                        onClicked: application.close()
                     }
 
                     RoundButton{
@@ -115,7 +113,7 @@ ApplicationWindow{
                     }
 
                     RoundButton{
-                        id: closeButton
+                        id: minimizeButton
                         width: 13
                         height: 13
 
@@ -123,10 +121,10 @@ ApplicationWindow{
                             radius: 20
                             width: parent.width
                             height: parent.height
-                            color: "#FF4343"
+                            color: "#7FFF74"
                         }
 
-                        onClicked: application.close()
+                        onClicked: application.showMinimized()
                     }
                 }
             }
@@ -138,16 +136,5 @@ ApplicationWindow{
             }
         }
 
-    }
-
-    Rectangle{
-        width: 300
-        height: 50
-        radius: 10
-        color: "#efefef"
-
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: application.windowMargin
     }
 }
